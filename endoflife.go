@@ -49,6 +49,9 @@ func main() {
 	flag.StringVar(&cycle, "cycle", "", "product cycle")
 	flag.Usage = func() { fmt.Print(usage) }
 	flag.Parse()
-
-	getProductCycle(product, cycle)
+	if product != "" && cycle != "" {
+		getProductCycle(product, cycle)	
+	} else {
+		fmt.Print(usage)
+	}
 }
