@@ -19,7 +19,7 @@ type Product struct {
 
 const usage = `Usage of endoflife:
   -p, --product [PRODUCT]
-      specify the product to find the end of life date for
+      specify the product to find information about
   -c, --cycle [VERSION] 
       specify the product cycle to show
   -h, --help print this help information and exit 
