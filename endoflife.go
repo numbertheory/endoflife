@@ -17,6 +17,14 @@ type Product struct {
 	Lts               bool   `json:"lts"`
 }
 
+const usage = `Usage of endoflife:
+  -p, --product [PRODUCT]
+      specify the product to find the end of life date for
+  -c, --cycle [VERSION] 
+      specify the product cycle to show
+  -h, --help print this help information and exit 
+`
+
 func getProductCycle(productName string, cycle string) {
 	var url = "https://endoflife.date/api/" + productName + "/" + cycle + ".json"
 	resp, err := http.Get(url)
@@ -35,8 +43,11 @@ func getProductCycle(productName string, cycle string) {
 func main() {
 	var product string
 	var cycle string
-	flag.StringVar(&product, "p", "python", "Specify product name. Default is python.")
-	flag.StringVar(&cycle, "c", "3.9", "Specify cycle. Default is 3.9")
+	flag.StringVar(&product, "p", "", "product name")
+	flag.StringVar(&product, "product", "", "product name")
+	flag.StringVar(&cycle, "c", "", "product cycle")
+	flag.StringVar(&cycle, "cycle", "", "product cycle")
+	flag.Usage = func() { fmt.Print(usage) }
 	flag.Parse()
 
 	getProductCycle(product, cycle)
