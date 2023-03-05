@@ -8,6 +8,9 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"github.com/fatih/color"
+	"time"
+	"strconv"
 )
 
 type ProductCycle struct {
@@ -35,6 +38,41 @@ const usage = `Usage of endoflife:
   -h, --help print this help information and exit 
 `
 
+func isPast(eolDate string) (string) {
+	currentTime := time.Date(
+		time.Now().Year(),
+		time.Now().Month(), 
+		time.Now().Day(),
+		0, 
+		0, 
+		0,
+		100,
+		time.Local)
+	
+	eolYear, _ := strconv.Atoi(strings.Split(eolDate, "-")[0])
+	eolMonth, _ := strconv.Atoi(strings.Split(eolDate, "-")[1])
+	eolDay, _ := strconv.Atoi(strings.Split(eolDate, "-")[2])
+
+	eolTime := time.Date(
+		eolYear,
+		time.Month(eolMonth),
+		eolDay,
+		0, 
+		0, 
+		0,
+		0,
+		time.Local)
+	
+	diffTime := eolTime.Sub(currentTime)
+	if (diffTime < 0) {
+		red := color.New(color.FgRed).SprintFunc()
+		return red(eolDate)
+	} else {
+		return eolDate
+	}
+}
+
+
 func getProductCycle(productName string, cycle string) {
 	var url = "https://endoflife.date/api/" + productName + "/" + cycle + ".json"
 	if (cycle == "") {
@@ -56,12 +94,13 @@ func getProductCycle(productName string, cycle string) {
 
 	if (cycle == "") { 
 		product := make([]ProductCycle, 0)
+		yellow := color.New(color.FgYellow).SprintFunc()
 		json.Unmarshal([]byte(bodyBytes), &product)
 		fmt.Printf("|    EOL     |   Latest Version  |\n")
 		fmt.Printf("+============+===================+\n")
 		for i := 0; i < len(product); i++ {
 			buffer := strings.Repeat(" ", 18 - len(product[i].Latest))
-			fmt.Printf("| " + product[i].Eol + " | " + product[i].Latest + buffer + "|\n")
+			fmt.Printf("| " + isPast(product[i].Eol) + " | " + yellow(product[i].Latest) + buffer + "|\n")
 		}
 		fmt.Printf("+============+===================+\n")
 	} else {
@@ -70,9 +109,10 @@ func getProductCycle(productName string, cycle string) {
 		fmt.Printf("|    EOL     |   Latest Version  |\n")
 		fmt.Printf("+============+===================+\n")
 		buffer := strings.Repeat(" ", 18 - len(productCycle.Latest))
-		fmt.Printf("| " + productCycle.Eol + " | " + productCycle.Latest + buffer + "|\n")
+		fmt.Printf("| " + isPast(productCycle.Eol) + " | " + productCycle.Latest + buffer + "|\n")
 		fmt.Printf("+============+===================+\n")
 	}
+	color.Cyan("Prints text in cyan.")
 
 }
 
