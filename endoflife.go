@@ -49,6 +49,11 @@ func getProductCycle(productName string, cycle string) {
 	defer resp.Body.Close()
 	bodyBytes, _ := ioutil.ReadAll(resp.Body)
 
+	if (resp.StatusCode == 404) {
+		fmt.Printf("Product or cycle does not exist\n")
+		return 
+	}
+
 	if (cycle == "") { 
 		product := make([]ProductCycle, 0)
 		json.Unmarshal([]byte(bodyBytes), &product)
