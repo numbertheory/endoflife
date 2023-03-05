@@ -23,7 +23,7 @@ Then, add that path with "/bin" attached to it to your local PATH. This will all
 
 Run the command with just a product to show the End of Life dates for all product cycles, with color output.
 
-<img src="color_output.png" width="200" />
+<img src="color_output.png" width="250" />
 
 You can also run the command targeting a specific product cycle, and it will return the latest version of that product cycle:
 

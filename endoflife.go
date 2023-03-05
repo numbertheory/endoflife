@@ -112,8 +112,6 @@ func getProductCycle(productName string, cycle string) {
 		fmt.Printf("| " + isPast(productCycle.Eol) + " | " + productCycle.Latest + buffer + "|\n")
 		fmt.Printf("+============+===================+\n")
 	}
-	color.Cyan("Prints text in cyan.")
-
 }
 
 func main() {
